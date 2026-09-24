@@ -1,6 +1,7 @@
 <!--
 Sync Impact Report
-- Version change: (template) → 1.0.0
+- Version change: 1.0.0 → 1.0.1 (PATCH: clarified allowed shared libraries in Principle III)
+- Previous: (template) → 1.0.0
 - Modified principles: all placeholders replaced (initial ratification)
 - Added principles: I. Clean Code, II. SOLID & Clean Architecture, III. Service Autonomy
   (Database-per-Service), IV. Asynchronous Messaging First, V. Test Discipline,
@@ -48,8 +49,10 @@ Rationale: this repository is a learning reference; readability is the primary f
 
 - Each microservice owns its data in its own database; no service reads or writes another
   service's database.
-- Services share only **message contracts** (a dedicated contracts library with immutable
-  records); they MUST NOT share domain or infrastructure code.
+- Services MUST NOT share domain models, persistence or business logic. Only three kinds of
+  shared libraries are allowed: **message contracts** (immutable records, no dependencies), a
+  **shared kernel** of framework-free primitives (`Entity`, `Result`, `Error`) and **service
+  defaults** (host cross-cutting setup: telemetry, health checks, problem details).
 - Each service is independently buildable, testable, containerized and deployable.
 - External clients reach services only through the API Gateway.
 
@@ -121,4 +124,4 @@ Rationale: this repository is a learning reference; readability is the primary f
   section; PATCH: clarification).
 - Reviews MUST check compliance with principles I–VII.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-09-24
+**Version**: 1.0.1 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-09-24
