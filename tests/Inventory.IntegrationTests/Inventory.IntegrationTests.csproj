@@ -7,4 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Services/Inventory/Inventory.Api/Inventory.Api.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../Shared/*.cs" LinkBase="Shared" />
+  </ItemGroup>
 </Project>

@@ -7,4 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="../../src/Services/Ordering/Ordering.Api/Ordering.Api.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../Shared/*.cs" LinkBase="Shared" />
+  </ItemGroup>
 </Project>
