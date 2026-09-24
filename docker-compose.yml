@@ -1,0 +1,134 @@
+name: microservices-store
+
+# Shared settings for every .NET service (YAML anchor).
+x-dotnet-service: &dotnet-service
+  restart: unless-stopped
+  environment: &dotnet-env
+    ASPNETCORE_ENVIRONMENT: Development
+    ASPNETCORE_HTTP_PORTS: "8080"
+    ConnectionStrings__RabbitMq: amqp://guest:guest@rabbitmq:5672
+    Database__ApplyMigrationsOnStartup: "true"
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889
+    OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+  depends_on: &dotnet-deps
+    sqlserver:
+      condition: service_healthy
+    rabbitmq:
+      condition: service_healthy
+
+services:
+  # ---------- Infrastructure ----------
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64 # runs under Rosetta on Apple Silicon
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD:-Store@Passw0rd}
+    ports:
+      - "14330:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # Management UI (guest/guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+    ports:
+      - "18888:18888" # UI: traces, logs, metrics
+
+  # ---------- Microservices ----------
+  catalog-api:
+    <<: *dotnet-service
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/Catalog.Api/Dockerfile
+    environment:
+      <<: *dotnet-env
+      ConnectionStrings__CatalogDb: Server=sqlserver,1433;Database=CatalogDb;User Id=sa;Password=${SA_PASSWORD:-Store@Passw0rd};TrustServerCertificate=True
+    ports:
+      - "5101:8080"
+
+  inventory-api:
+    <<: *dotnet-service
+    build:
+      context: .
+      dockerfile: src/Services/Inventory/Inventory.Api/Dockerfile
+    environment:
+      <<: *dotnet-env
+      ConnectionStrings__InventoryDb: Server=sqlserver,1433;Database=InventoryDb;User Id=sa;Password=${SA_PASSWORD:-Store@Passw0rd};TrustServerCertificate=True
+    ports:
+      - "5102:8080"
+
+  ordering-api:
+    <<: *dotnet-service
+    build:
+      context: .
+      dockerfile: src/Services/Ordering/Ordering.Api/Dockerfile
+    environment:
+      <<: *dotnet-env
+      ConnectionStrings__OrderingDb: Server=sqlserver,1433;Database=OrderingDb;User Id=sa;Password=${SA_PASSWORD:-Store@Passw0rd};TrustServerCertificate=True
+      Services__CatalogBaseUrl: http://catalog-api:8080
+    ports:
+      - "5103:8080"
+
+  payment-worker:
+    <<: *dotnet-service
+    build:
+      context: .
+      dockerfile: src/Services/Payment/Payment.Worker/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5104:8080"
+
+  gateway:
+    <<: *dotnet-service
+    build:
+      context: .
+      dockerfile: src/Gateway/Store.Gateway/Dockerfile
+    environment:
+      <<: *dotnet-env
+      ReverseProxy__Clusters__catalog__Destinations__primary__Address: http://catalog-api:8080
+      ReverseProxy__Clusters__inventory__Destinations__primary__Address: http://inventory-api:8080
+      ReverseProxy__Clusters__ordering__Destinations__primary__Address: http://ordering-api:8080
+    depends_on:
+      - catalog-api
+      - inventory-api
+      - ordering-api
+    ports:
+      - "5100:8080"
+
+  # ---------- Frontend ----------
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    environment:
+      NUXT_PUBLIC_API_BASE: http://localhost:5100
+    depends_on:
+      - gateway
+    ports:
+      - "3100:3000"
+
+volumes:
+  sqlserver-data:
