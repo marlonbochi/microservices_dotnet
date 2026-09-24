@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,9 @@ public static partial class DatabaseMigrationExtensions
                 LogMigrated(logger, typeof(TContext).Name);
                 return;
             }
-            catch (Exception exception) when (attempt < MaxAttempts)
+            // Only connection/database errors are worth retrying (SQL Server still booting); anything else
+            // (e.g. a configuration bug) must fail fast instead of hanging startup for a minute.
+            catch (DbException exception) when (attempt < MaxAttempts)
             {
                 LogRetrying(logger, typeof(TContext).Name, attempt, exception.Message);
                 await Task.Delay(DelayBetweenAttempts);
