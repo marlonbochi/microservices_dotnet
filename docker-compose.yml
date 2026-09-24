@@ -54,6 +54,7 @@ services:
       DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
     ports:
       - "18888:18888" # UI: traces, logs, metrics
+      - "4317:18889"   # OTLP gRPC (for services run with `dotnet run` on the host)
 
   # ---------- Microservices ----------
   catalog-api:

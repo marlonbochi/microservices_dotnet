@@ -74,7 +74,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </UFormField>
         <div class="grid grid-cols-2 gap-4">
           <UFormField label="Preço (R$)" name="price" required>
-            <UInputNumber v-model="state.price" :min="0" :step="0.01" :format-options="{ minimumFractionDigits: 2 }" class="w-full" />
+            <UInputNumber v-model="state.price" locale="pt-BR" :min="0" :step="0.01" :format-options="{ minimumFractionDigits: 2 }" class="w-full" />
           </UFormField>
           <UFormField v-if="!isEdit" label="Estoque inicial" name="initialStock" required>
             <UInputNumber v-model="state.initialStock" :min="0" class="w-full" />
