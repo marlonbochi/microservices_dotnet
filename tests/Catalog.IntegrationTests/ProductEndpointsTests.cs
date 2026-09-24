@@ -35,8 +35,7 @@ public sealed class ProductEndpointsTests(CatalogApiFactory factory) : IClassFix
         response.Headers.Location!.ToString().ShouldContain(Products);
         var product = await response.ReadAs<ProductResponse>();
         product.Sku.ShouldBe(sku.ToUpperInvariant());
-        (await factory.Harness.Published.Any<ProductCreated>(
-            message => message.Context.Message.ProductId == product.Id && message.Context.Message.InitialStock == 10, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<ProductCreated>(message => message.ProductId == product.Id && message.InitialStock == 10)).ShouldBeTrue();
     }
 
     [Fact]
@@ -70,7 +69,7 @@ public sealed class ProductEndpointsTests(CatalogApiFactory factory) : IClassFix
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         (await response.ReadAs<ProductResponse>()).Price.ShouldBe(399.90m);
-        (await factory.Harness.Published.Any<ProductUpdated>(message => message.Context.Message.ProductId == product.Id, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<ProductUpdated>(message => message.ProductId == product.Id)).ShouldBeTrue();
     }
 
     [Fact]

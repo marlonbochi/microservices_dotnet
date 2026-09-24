@@ -42,7 +42,7 @@ public sealed class OrderEndpointsTests(OrderingApiFactory factory) : IClassFixt
 
     private async Task WaitForPublishedAsync<T>(Guid orderId, Func<T, Guid> orderIdOf)
         where T : class =>
-        (await factory.Harness.Published.Any<T>(message => orderIdOf(message.Context.Message) == orderId, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<T>(message => orderIdOf(message) == orderId)).ShouldBeTrue();
 
     [Fact]
     public async Task Post_ValidOrder_Returns202WithCatalogPricesAndStartsSaga()

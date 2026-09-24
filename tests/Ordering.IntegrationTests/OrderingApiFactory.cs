@@ -1,7 +1,10 @@
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ordering.Application.Abstractions;
 using Ordering.Infrastructure;
+using Store.Contracts.Inventory;
+using Store.Contracts.Payment;
 using Store.SharedKernel;
 using Store.Testing;
 
@@ -18,6 +21,15 @@ public sealed class OrderingApiFactory : ServiceApiFactory<Program>
     {
         services.RemoveAll<ICatalogClient>();
         services.AddSingleton<ICatalogClient>(Catalog);
+    }
+
+    /// <summary>Stand-ins for Inventory and Payment, which receive the saga's commands.</summary>
+    protected override void ConfigureTestBus(IBusRegistrationConfigurator bus)
+    {
+        bus.AddConsumer<MessageCapture<ReserveStock>>();
+        bus.AddConsumer<MessageCapture<ProcessPayment>>();
+        bus.AddConsumer<MessageCapture<CommitStock>>();
+        bus.AddConsumer<MessageCapture<ReleaseStock>>();
     }
 }
 

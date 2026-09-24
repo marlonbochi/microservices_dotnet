@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json.Serialization;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,7 @@ public static class DependencyInjection
         bus.AddEntityFrameworkOutbox<OrderingDbContext>(outbox =>
         {
             outbox.UseSqlServer();
+            outbox.IsolationLevel = IsolationLevel.ReadCommitted;
             outbox.UseBusOutbox();
         });
 

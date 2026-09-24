@@ -50,12 +50,17 @@ public abstract class ServiceApiFactory<TProgram> : WebApplicationFactory<TProgr
         builder.UseSetting("Database:ApplyMigrationsOnStartup", "true");
         builder.ConfigureTestServices(services =>
         {
-            services.AddMassTransitTestHarness();
+            services.AddMassTransitTestHarness(ConfigureTestBus);
             ConfigureTestServices(services);
         });
     }
 
     protected virtual void ConfigureTestServices(IServiceCollection services)
+    {
+    }
+
+    /// <summary>Registers extra consumers that stand in for the other services (see <see cref="MessageCapture{T}"/>).</summary>
+    protected virtual void ConfigureTestBus(IBusRegistrationConfigurator bus)
     {
     }
 }

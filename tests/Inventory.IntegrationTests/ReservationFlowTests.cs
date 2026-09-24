@@ -25,11 +25,11 @@ public sealed class ReservationFlowTests(InventoryApiFactory factory) : IClassFi
         var orderId = Guid.NewGuid();
 
         await factory.Harness.Bus.Publish(new ReserveStock(orderId, [new OrderLine(productId, 4)]), Token);
-        (await factory.Harness.Published.Any<StockReserved>(message => message.Context.Message.OrderId == orderId, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<StockReserved>(message => message.OrderId == orderId)).ShouldBeTrue();
         (await GetStockAsync(_client, productId)).Available.ShouldBe(6);
 
         await factory.Harness.Bus.Publish(new ReleaseStock(orderId), Token);
-        (await factory.Harness.Published.Any<StockReleased>(message => message.Context.Message.OrderId == orderId, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<StockReleased>(message => message.OrderId == orderId)).ShouldBeTrue();
 
         var stock = await GetStockAsync(_client, productId);
         stock.Available.ShouldBe(10);
@@ -43,9 +43,9 @@ public sealed class ReservationFlowTests(InventoryApiFactory factory) : IClassFi
         var orderId = Guid.NewGuid();
 
         await factory.Harness.Bus.Publish(new ReserveStock(orderId, [new OrderLine(productId, 3)]), Token);
-        (await factory.Harness.Published.Any<StockReserved>(message => message.Context.Message.OrderId == orderId, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<StockReserved>(message => message.OrderId == orderId)).ShouldBeTrue();
         await factory.Harness.Bus.Publish(new CommitStock(orderId), Token);
-        (await factory.Harness.Published.Any<StockCommitted>(message => message.Context.Message.OrderId == orderId, Token)).ShouldBeTrue();
+        (await factory.Harness.WaitForPublishedAsync<StockCommitted>(message => message.OrderId == orderId)).ShouldBeTrue();
 
         var stock = await GetStockAsync(_client, productId);
         stock.QuantityOnHand.ShouldBe(7);
@@ -76,9 +76,8 @@ public sealed class ReservationFlowTests(InventoryApiFactory factory) : IClassFi
 
     private (int Reserved, int Failed) CountOutcomes(HashSet<Guid> orderIds)
     {
-        var published = factory.Harness.Published;
-        var reserved = published.Select<StockReserved>().Count(message => orderIds.Contains(message.Context.Message.OrderId));
-        var failed = published.Select<StockReservationFailed>().Count(message => orderIds.Contains(message.Context.Message.OrderId));
+        var reserved = factory.Harness.CountPublished<StockReserved>(message => orderIds.Contains(message.OrderId));
+        var failed = factory.Harness.CountPublished<StockReservationFailed>(message => orderIds.Contains(message.OrderId));
         return (reserved, failed);
     }
 }

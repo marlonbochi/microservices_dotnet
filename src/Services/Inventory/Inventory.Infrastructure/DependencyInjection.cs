@@ -1,3 +1,4 @@
+using System.Data;
 using Inventory.Application.Abstractions;
 using Inventory.Infrastructure.Messaging;
 using Inventory.Infrastructure.Messaging.Consumers;
@@ -46,7 +47,14 @@ public static class DependencyInjection
         bus.AddConsumer<CommitStockConsumer>();
         bus.AddConsumer<ReleaseStockConsumer>();
 
-        bus.AddEntityFrameworkOutbox<InventoryDbContext>(outbox => outbox.UseSqlServer());
+        bus.AddEntityFrameworkOutbox<InventoryDbContext>(outbox =>
+        {
+            outbox.UseSqlServer();
+
+            // The default (RepeatableRead) keeps read locks until commit, so two orders reading the same
+            // StockItem deadlock when both try to update it. ReadCommitted + rowversion is enough here.
+            outbox.IsolationLevel = IsolationLevel.ReadCommitted;
+        });
 
         // Inbox (de-duplication by MessageId) + outbox for messages published while consuming.
         bus.AddConfigureEndpointsCallback((context, _, endpoint) =>

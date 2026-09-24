@@ -1,3 +1,4 @@
+using System.Data;
 using Catalog.Application.Abstractions;
 using Catalog.Infrastructure.Messaging;
 using Catalog.Infrastructure.Persistence;
@@ -34,6 +35,7 @@ public static class DependencyInjection
         builder.AddStoreMessaging(bus => bus.AddEntityFrameworkOutbox<CatalogDbContext>(outbox =>
         {
             outbox.UseSqlServer();
+            outbox.IsolationLevel = IsolationLevel.ReadCommitted;
             outbox.UseBusOutbox();
         }));
 
