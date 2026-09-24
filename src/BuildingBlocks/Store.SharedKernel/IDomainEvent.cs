@@ -12,3 +12,10 @@ public interface IHasDomainEvents
 
     void ClearDomainEvents();
 }
+
+/// <summary>Reacts to a domain event after the aggregate that raised it has been saved.</summary>
+public interface IDomainEventHandler<in TEvent>
+    where TEvent : IDomainEvent
+{
+    Task HandleAsync(TEvent domainEvent, CancellationToken cancellationToken);
+}
