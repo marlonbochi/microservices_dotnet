@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>store-inventory-api</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
+    <ProjectReference Include="../../../BuildingBlocks/Store.ServiceDefaults/Store.ServiceDefaults.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Inventory.IntegrationTests" />
+  </ItemGroup>
+</Project>

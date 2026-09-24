@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="MassTransit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Services/Inventory/Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

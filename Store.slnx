@@ -1,0 +1,42 @@
+<Solution>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="src/BuildingBlocks/Store.Contracts/Store.Contracts.csproj" />
+    <Project Path="src/BuildingBlocks/Store.ServiceDefaults/Store.ServiceDefaults.csproj" />
+    <Project Path="src/BuildingBlocks/Store.SharedKernel/Store.SharedKernel.csproj" />
+  </Folder>
+  <Folder Name="/Gateway/">
+    <Project Path="src/Gateway/Store.Gateway/Store.Gateway.csproj" />
+  </Folder>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/Catalog/">
+    <Project Path="src/Services/Catalog/Catalog.Api/Catalog.Api.csproj" />
+    <Project Path="src/Services/Catalog/Catalog.Application/Catalog.Application.csproj" />
+    <Project Path="src/Services/Catalog/Catalog.Domain/Catalog.Domain.csproj" />
+    <Project Path="src/Services/Catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Inventory/">
+    <Project Path="src/Services/Inventory/Inventory.Api/Inventory.Api.csproj" />
+    <Project Path="src/Services/Inventory/Inventory.Application/Inventory.Application.csproj" />
+    <Project Path="src/Services/Inventory/Inventory.Domain/Inventory.Domain.csproj" />
+    <Project Path="src/Services/Inventory/Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Ordering/">
+    <Project Path="src/Services/Ordering/Ordering.Api/Ordering.Api.csproj" />
+    <Project Path="src/Services/Ordering/Ordering.Application/Ordering.Application.csproj" />
+    <Project Path="src/Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" />
+    <Project Path="src/Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/Payment/">
+    <Project Path="src/Services/Payment/Payment.Worker/Payment.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Architecture.Tests/Architecture.Tests.csproj" />
+    <Project Path="tests/Catalog.IntegrationTests/Catalog.IntegrationTests.csproj" />
+    <Project Path="tests/Catalog.UnitTests/Catalog.UnitTests.csproj" />
+    <Project Path="tests/Inventory.IntegrationTests/Inventory.IntegrationTests.csproj" />
+    <Project Path="tests/Inventory.UnitTests/Inventory.UnitTests.csproj" />
+    <Project Path="tests/Ordering.IntegrationTests/Ordering.IntegrationTests.csproj" />
+    <Project Path="tests/Ordering.UnitTests/Ordering.UnitTests.csproj" />
+    <Project Path="tests/Payment.UnitTests/Payment.UnitTests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>store-payment-worker</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../BuildingBlocks/Store.Contracts/Store.Contracts.csproj" />
+    <ProjectReference Include="../../../BuildingBlocks/Store.ServiceDefaults/Store.ServiceDefaults.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Payment.UnitTests" />
+  </ItemGroup>
+</Project>

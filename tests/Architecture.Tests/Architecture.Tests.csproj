@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Services/Catalog/Catalog.Domain/Catalog.Domain.csproj" />
+    <ProjectReference Include="../../src/Services/Catalog/Catalog.Application/Catalog.Application.csproj" />
+    <ProjectReference Include="../../src/Services/Catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Services/Catalog/Catalog.Api/Catalog.Api.csproj" />
+    <ProjectReference Include="../../src/Services/Inventory/Inventory.Domain/Inventory.Domain.csproj" />
+    <ProjectReference Include="../../src/Services/Inventory/Inventory.Application/Inventory.Application.csproj" />
+    <ProjectReference Include="../../src/Services/Inventory/Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Services/Inventory/Inventory.Api/Inventory.Api.csproj" />
+    <ProjectReference Include="../../src/Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" />
+    <ProjectReference Include="../../src/Services/Ordering/Ordering.Application/Ordering.Application.csproj" />
+    <ProjectReference Include="../../src/Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Services/Ordering/Ordering.Api/Ordering.Api.csproj" />
+  </ItemGroup>
+</Project>

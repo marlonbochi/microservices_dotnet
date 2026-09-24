@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Testcontainers.MsSql" />
+    <PackageReference Include="MassTransit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Services/Catalog/Catalog.Api/Catalog.Api.csproj" />
+  </ItemGroup>
+</Project>
