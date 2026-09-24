@@ -42,7 +42,7 @@ All errors use RFC 9457 Problem Details (`application/problem+json`); validation
 
 | Method | Path | Body | Success | Errors |
 |--------|------|------|---------|--------|
-| POST | `/orders` | `PlaceOrderRequest` | 202 `OrderResponse` + `Location` | 400, 422 (unknown product), 503 (catalog unavailable) |
+| POST | `/orders` | `PlaceOrderRequest` | 202 `OrderResponse` + `Location` | 400 (invalid or unknown product), 503 (catalog unavailable) |
 | GET | `/orders` | `?take=50` | 200 `OrderSummaryResponse[]` (newest first) | |
 | GET | `/orders/{id}` | | 200 `OrderResponse` | 404 |
 

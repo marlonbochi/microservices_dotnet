@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "0*"]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Restore
+        run: dotnet restore Store.slnx
+      - name: Build (warnings as errors)
+        run: dotnet build Store.slnx --no-restore -c Release
+      - name: Unit, messaging and architecture tests
+        run: |
+          for project in Architecture.Tests Catalog.UnitTests Inventory.UnitTests Ordering.UnitTests Payment.UnitTests; do
+            dotnet test --project tests/$project --no-build -c Release
+          done
+      - name: Integration tests (Testcontainers)
+        run: |
+          for project in Catalog.IntegrationTests Inventory.IntegrationTests Ordering.IntegrationTests; do
+            dotnet test --project tests/$project --no-build -c Release
+          done
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm test
+      - run: npm run build
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build all images
+        run: docker compose build
