@@ -16,6 +16,9 @@ namespace Ordering.UnitTests.Sagas;
 /// <summary>Drives the order saga through every transition with the in-memory MassTransit harness.</summary>
 public sealed class OrderStateMachineTests : IAsyncLifetime
 {
+    private static readonly TimeSpan StatusTimeout = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan StatusPollInterval = TimeSpan.FromMilliseconds(20);
+
     private readonly InMemoryOrders _orders = new();
     private ServiceProvider _provider = null!;
     private ITestHarness _harness = null!;
@@ -39,6 +42,21 @@ public sealed class OrderStateMachineTests : IAsyncLifetime
     }
 
     public async ValueTask DisposeAsync() => await _provider.DisposeAsync();
+
+    /// <summary>
+    /// The harness reports the new saga state as soon as TransitionTo runs, but the activity that mirrors
+    /// it on the Order executes right after, so wait briefly instead of asserting immediately.
+    /// </summary>
+    private static async Task ShouldReachStatusAsync(Order order, OrderStatus expected)
+    {
+        var deadline = DateTime.UtcNow + StatusTimeout;
+        while (order.Status != expected && DateTime.UtcNow < deadline)
+        {
+            await Task.Delay(StatusPollInterval, Token);
+        }
+
+        order.Status.ShouldBe(expected);
+    }
 
     private async Task<Order> SubmitOrderAsync(bool simulatePaymentFailure = false)
     {
@@ -78,7 +96,7 @@ public sealed class OrderStateMachineTests : IAsyncLifetime
         await _harness.Bus.Publish(new StockCommitted(order.Id), Token);
         (await _saga.Exists(order.Id, _machine.Confirmed)).ShouldNotBeNull();
 
-        order.Status.ShouldBe(OrderStatus.Confirmed);
+        await ShouldReachStatusAsync(order, OrderStatus.Confirmed);
         order.History.Select(change => change.Status).ShouldBe(
             [OrderStatus.Submitted, OrderStatus.StockReserved, OrderStatus.PaymentApproved, OrderStatus.Confirmed]);
     }
@@ -91,7 +109,7 @@ public sealed class OrderStateMachineTests : IAsyncLifetime
         await _harness.Bus.Publish(new StockReservationFailed(order.Id, "Insufficient stock"), Token);
 
         (await _saga.Exists(order.Id, _machine.Rejected)).ShouldNotBeNull();
-        order.Status.ShouldBe(OrderStatus.Rejected);
+        await ShouldReachStatusAsync(order, OrderStatus.Rejected);
         order.FailureReason.ShouldBe("Insufficient stock");
         (await _harness.Published.Any<ProcessPayment>(Token)).ShouldBeFalse();
     }
@@ -106,12 +124,12 @@ public sealed class OrderStateMachineTests : IAsyncLifetime
         await _harness.Bus.Publish(new PaymentDeclined(order.Id, "Card declined"), Token);
         (await _saga.Exists(order.Id, _machine.AwaitingRelease)).ShouldNotBeNull();
         (await _harness.Published.Any<ReleaseStock>(message => message.Context.Message.OrderId == order.Id, Token)).ShouldBeTrue();
-        order.Status.ShouldBe(OrderStatus.PaymentDeclined);
+        await ShouldReachStatusAsync(order, OrderStatus.PaymentDeclined);
 
         await _harness.Bus.Publish(new StockReleased(order.Id), Token);
         (await _saga.Exists(order.Id, _machine.Cancelled)).ShouldNotBeNull();
 
-        order.Status.ShouldBe(OrderStatus.Cancelled);
+        await ShouldReachStatusAsync(order, OrderStatus.Cancelled);
         order.FailureReason.ShouldBe("Card declined");
         (await _harness.Published.Any<CommitStock>(Token)).ShouldBeFalse();
     }
