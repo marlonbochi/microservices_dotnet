@@ -104,7 +104,7 @@ All Technical Context items were resolved; each decision below records rationale
 ## R12. Frontend
 
 - **Decision**: Nuxt 4 (`app/` directory), Nuxt UI 4 (Tailwind 4 based, free), Pinia stores,
-  `$fetch` wrappers in composables, `@microsoft/signalr` for live updates, UI text in pt-BR. Runs as
+  `$fetch` wrappers in composables, `@microsoft/signalr` for live updates, UI text in English. Runs as
   SSR Node server in Docker; browser calls the gateway directly (`NUXT_PUBLIC_API_BASE`).
 - **Alternatives**: Vuetify / PrimeVue (heavier), plain Vue + Vite (no conventions).
 

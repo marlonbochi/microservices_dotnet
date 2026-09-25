@@ -16,11 +16,11 @@ async function submit() {
   saving.value = true
   try {
     await catalog.restock(props.product.id, quantity.value)
-    toast.add({ title: 'Estoque atualizado', color: 'success' })
+    toast.add({ title: 'Stock updated', color: 'success' })
     open.value = false
   }
   catch (error) {
-    toast.add({ title: 'Falha ao repor estoque', description: describeProblem(problemOf(error)), color: 'error' })
+    toast.add({ title: 'Restock failed', description: describeProblem(problemOf(error)), color: 'error' })
   }
   finally {
     saving.value = false
@@ -29,14 +29,14 @@ async function submit() {
 </script>
 
 <template>
-  <UModal v-model:open="open" :title="`Repor estoque: ${product?.name ?? ''}`" description="Chamada síncrona ao Inventory (via gateway).">
+  <UModal v-model:open="open" :title="`Restock: ${product?.name ?? ''}`" description="Synchronous call to Inventory (through the gateway).">
     <template #body>
       <div class="flex items-end gap-3">
-        <UFormField label="Quantidade" class="flex-1">
+        <UFormField label="Quantity" class="flex-1">
           <UInputNumber v-model="quantity" :min="1" :max="100000" class="w-full" />
         </UFormField>
         <UButton :loading="saving" icon="i-lucide-plus" @click="submit">
-          Adicionar
+          Add
         </UButton>
       </div>
     </template>

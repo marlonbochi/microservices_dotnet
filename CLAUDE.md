@@ -27,4 +27,4 @@ Spec-driven with Spec Kit: read `.specify/memory/constitution.md` (principles Iâ
 - Integration events go through `IIntegrationEventPublisher` (outbox). Message contracts live only in
   `Store.Contracts`. Never share domain code between services.
 - Package versions only in `Directory.Packages.props`. MassTransit stays on v8 (license).
-- Docs in pt-BR under `docs/`; code, identifiers and commits in English (Conventional Commits).
+- Everything in English: code, commits (Conventional Commits), docs under `docs/`, ADRs and UI text.

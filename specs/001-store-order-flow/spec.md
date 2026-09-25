@@ -200,9 +200,9 @@ verify it spans the gateway, orders, inventory and payment services.
 
 - Single-tenant demo store; no authentication/authorization is required (out of scope, documented
   as a future improvement).
-- A single currency (BRL) is used; taxes, shipping and discounts are out of scope.
+- A single currency (USD) is used; taxes, shipping and discounts are out of scope.
 - Payment is simulated; no real payment provider is contacted.
 - Order cancellation by the customer after confirmation, shipping and returns are out of scope.
 - The system runs on a developer machine with Docker; production deployment (Kubernetes, cloud) is
   out of scope but the design must not preclude it.
-- UI language is Portuguese (pt-BR).
+- UI, documentation and code are in English (the repository is a public portfolio piece).

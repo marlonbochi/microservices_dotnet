@@ -1,5 +1,9 @@
 <!--
 Sync Impact Report
+- Version change: 1.0.1 → 1.1.0 (MINOR: Technology Constraints now require English for docs and UI)
+- Templates requiring updates: none ✅
+
+Previous report:
 - Version change: 1.0.0 → 1.0.1 (PATCH: clarified allowed shared libraries in Principle III)
 - Previous: (template) → 1.0.0
 - Modified principles: all placeholders replaced (initial ratification)
@@ -102,8 +106,8 @@ Rationale: this repository is a learning reference; readability is the primary f
 - Runtime: everything runs locally with `docker compose up`.
 - Tests: xUnit, FluentAssertions-compatible assertions (Shouldly), Testcontainers,
   MassTransit Test Harness, NetArchTest.
-- Documentation is written in Portuguese (pt-BR); code, identifiers and commit messages in
-  English.
+- Everything in the repository is written in English: code, identifiers, commit messages,
+  documentation, ADRs and UI text.
 
 ## Development Workflow & Quality Gates
 
@@ -124,4 +128,4 @@ Rationale: this repository is a learning reference; readability is the primary f
   section; PATCH: clarification).
 - Reviews MUST check compliance with principles I–VII.
 
-**Version**: 1.0.1 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-09-24
+**Version**: 1.1.0 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-09-24

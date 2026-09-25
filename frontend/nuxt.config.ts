@@ -22,7 +22,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'pt-BR' },
+      htmlAttrs: { lang: 'en' },
       title: 'Microservices Store',
     },
   },

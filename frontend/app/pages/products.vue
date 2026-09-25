@@ -11,9 +11,9 @@ const selected = ref<ProductWithStock | null>(null)
 
 const columns: TableColumn<ProductWithStock>[] = [
   { accessorKey: 'sku', header: 'SKU' },
-  { accessorKey: 'name', header: 'Produto' },
-  { accessorKey: 'price', header: 'Preço' },
-  { id: 'stock', header: 'Estoque (Inventory)' },
+  { accessorKey: 'name', header: 'Product' },
+  { accessorKey: 'price', header: 'Price' },
+  { id: 'stock', header: 'Stock (Inventory)' },
   { id: 'actions', header: '' },
 ]
 
@@ -22,7 +22,7 @@ onMounted(async () => {
     await catalog.load()
   }
   catch (error) {
-    toast.add({ title: 'Não foi possível carregar', description: describeProblem(problemOf(error), 'Gateway indisponível?'), color: 'error' })
+    toast.add({ title: 'Could not load', description: describeProblem(problemOf(error), 'Is the gateway down?'), color: 'error' })
   }
 })
 
@@ -47,24 +47,24 @@ function openRestock(product: ProductWithStock) {
     <div class="flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold">
-          Produtos
+          Products
         </h1>
         <p class="text-sm text-(--ui-text-muted)">
-          Dados do produto vêm do <b>Catalog</b>; quantidades vêm do <b>Inventory</b>. Duas APIs, uma tela.
+          Product data comes from <b>Catalog</b>; quantities come from <b>Inventory</b>. Two APIs, one screen.
         </p>
       </div>
       <div class="flex gap-2">
         <UButton color="neutral" variant="outline" icon="i-lucide-refresh-cw" :loading="catalog.loading" @click="catalog.load()">
-          Atualizar
+          Refresh
         </UButton>
         <UButton icon="i-lucide-plus" @click="openCreate">
-          Novo produto
+          New product
         </UButton>
       </div>
     </div>
 
     <UCard>
-      <UTable :data="catalog.productsWithStock" :columns="columns" :loading="catalog.loading" empty="Nenhum produto cadastrado.">
+      <UTable :data="catalog.productsWithStock" :columns="columns" :loading="catalog.loading" empty="No products yet.">
         <template #name-cell="{ row }">
           <div>
             <p class="font-medium">
@@ -81,24 +81,24 @@ function openRestock(product: ProductWithStock) {
         <template #stock-cell="{ row }">
           <div v-if="row.original.stock" class="flex flex-wrap gap-1">
             <UBadge :color="row.original.stock.available > 0 ? 'success' : 'error'" variant="subtle">
-              Disponível: {{ row.original.stock.available }}
+              Available: {{ row.original.stock.available }}
             </UBadge>
             <UBadge v-if="row.original.stock.quantityReserved > 0" color="warning" variant="subtle">
-              Reservado: {{ row.original.stock.quantityReserved }}
+              Reserved: {{ row.original.stock.quantityReserved }}
             </UBadge>
             <UBadge color="neutral" variant="outline">
-              Físico: {{ row.original.stock.quantityOnHand }}
+              On hand: {{ row.original.stock.quantityOnHand }}
             </UBadge>
           </div>
           <UBadge v-else color="neutral" variant="subtle" icon="i-lucide-loader-circle">
-            Sincronizando via evento...
+            Syncing via event...
           </UBadge>
         </template>
         <template #actions-cell="{ row }">
           <div class="flex justify-end gap-1">
-            <UButton size="sm" color="neutral" variant="ghost" icon="i-lucide-pencil" aria-label="Editar" @click="openEdit(row.original)" />
+            <UButton size="sm" color="neutral" variant="ghost" icon="i-lucide-pencil" aria-label="Edit" @click="openEdit(row.original)" />
             <UButton size="sm" variant="soft" icon="i-lucide-package-plus" :disabled="!row.original.stock" @click="openRestock(row.original)">
-              Repor
+              Restock
             </UButton>
           </div>
         </template>

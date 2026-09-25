@@ -2,22 +2,22 @@
 const config = useRuntimeConfig().public
 
 const tools = [
-  { title: 'RabbitMQ Management', text: 'Exchanges, filas por consumidor e filas _error (dead-letter). Login guest/guest.', icon: 'i-lucide-rabbit', url: config.rabbitMqUrl },
-  { title: 'Aspire Dashboard', text: 'Traces distribuídos (um pedido atravessando todos os serviços), logs estruturados e métricas.', icon: 'i-lucide-activity', url: config.dashboardUrl },
-  { title: 'Catalog API (Scalar)', text: 'Documentação OpenAPI interativa do serviço de catálogo.', icon: 'i-lucide-book-open', url: 'http://localhost:5101/scalar' },
-  { title: 'Inventory API (Scalar)', text: 'Documentação OpenAPI interativa do serviço de estoque.', icon: 'i-lucide-book-open', url: 'http://localhost:5102/scalar' },
-  { title: 'Ordering API (Scalar)', text: 'Documentação OpenAPI interativa do serviço de pedidos.', icon: 'i-lucide-book-open', url: 'http://localhost:5103/scalar' },
+  { title: 'RabbitMQ Management', text: 'Exchanges, one queue per consumer and _error (dead-letter) queues. Login guest/guest.', icon: 'i-lucide-rabbit', url: config.rabbitMqUrl },
+  { title: 'Aspire Dashboard', text: 'Distributed traces (one order crossing every service), structured logs and metrics.', icon: 'i-lucide-activity', url: config.dashboardUrl },
+  { title: 'Catalog API (Scalar)', text: 'Interactive OpenAPI docs of the catalog service.', icon: 'i-lucide-book-open', url: 'http://localhost:5101/scalar' },
+  { title: 'Inventory API (Scalar)', text: 'Interactive OpenAPI docs of the inventory service.', icon: 'i-lucide-book-open', url: 'http://localhost:5102/scalar' },
+  { title: 'Ordering API (Scalar)', text: 'Interactive OpenAPI docs of the ordering service.', icon: 'i-lucide-book-open', url: 'http://localhost:5103/scalar' },
 ]
 
 const flow = [
   ['Frontend', 'POST /api/ordering/orders', 'Gateway (YARP)'],
-  ['Ordering', 'GET /api/catalog/products/batch (HTTP + resiliência)', 'Catalog'],
+  ['Ordering', 'GET /api/catalog/products/batch (HTTP + resilience)', 'Catalog'],
   ['Ordering', 'OrderSubmitted (outbox)', 'Saga'],
   ['Saga', 'ReserveStock', 'Inventory'],
   ['Inventory', 'StockReserved | StockReservationFailed', 'Saga'],
   ['Saga', 'ProcessPayment', 'Payment'],
   ['Payment', 'PaymentApproved | PaymentDeclined', 'Saga'],
-  ['Saga', 'CommitStock | ReleaseStock (compensação)', 'Inventory'],
+  ['Saga', 'CommitStock | ReleaseStock (compensation)', 'Inventory'],
   ['Inventory', 'StockCommitted | StockReleased', 'Saga'],
   ['Ordering', 'OrderStatusChanged (SignalR)', 'Frontend'],
 ]
@@ -27,10 +27,10 @@ const flow = [
   <div class="space-y-6">
     <div>
       <h1 class="text-2xl font-bold">
-        Arquitetura
+        Architecture
       </h1>
       <p class="text-sm text-(--ui-text-muted)">
-        Ferramentas para enxergar o sistema distribuído por dentro. Veja também a pasta <code>docs/</code> do repositório.
+        Tools to look inside the distributed system. See also the repository's <code>docs/</code> folder.
       </p>
     </div>
 
@@ -45,7 +45,7 @@ const flow = [
             {{ tool.text }}
           </p>
           <UButton :to="tool.url" target="_blank" variant="soft" trailing-icon="i-lucide-external-link">
-            Abrir
+            Open
           </UButton>
         </div>
       </UCard>
@@ -54,7 +54,7 @@ const flow = [
     <UCard>
       <template #header>
         <h2 class="font-semibold">
-          Fluxo de um pedido
+          Life of an order
         </h2>
       </template>
       <ol class="space-y-2 text-sm">

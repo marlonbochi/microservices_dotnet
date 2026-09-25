@@ -5,14 +5,14 @@ const toast = useToast()
 
 interface Line { productId: string | undefined, quantity: number }
 
-const customerName = ref('Cliente Teste')
-const customerEmail = ref('cliente@example.com')
+const customerName = ref('Test Customer')
+const customerEmail = ref('customer@example.com')
 const simulatePaymentFailure = ref(false)
 const lines = ref<Line[]>([{ productId: undefined, quantity: 1 }])
 const submitting = ref(false)
 
 const productOptions = computed(() => catalog.productsWithStock.map(product => ({
-  label: `${product.name} — ${formatCurrency(product.price)} (disp. ${product.stock?.available ?? '?'})`,
+  label: `${product.name} — ${formatCurrency(product.price)} (avail. ${product.stock?.available ?? '?'})`,
   value: product.id,
 })))
 
@@ -42,11 +42,11 @@ async function submit() {
         .filter((line): line is { productId: string, quantity: number } => !!line.productId)
         .map(line => ({ productId: line.productId, quantity: line.quantity })),
     })
-    toast.add({ title: 'Pedido enviado (202 Accepted)', description: `Pedido ${order.id.slice(0, 8)} em processamento pela saga.`, color: 'info' })
+    toast.add({ title: 'Order sent (202 Accepted)', description: `Order ${order.id.slice(0, 8)} is being processed by the saga.`, color: 'info' })
     lines.value = [{ productId: undefined, quantity: 1 }]
   }
   catch (error) {
-    toast.add({ title: 'Pedido não aceito', description: describeProblem(problemOf(error)), color: 'error' })
+    toast.add({ title: 'Order not accepted', description: describeProblem(problemOf(error)), color: 'error' })
   }
   finally {
     submitting.value = false
@@ -58,12 +58,12 @@ async function submit() {
   <UCard>
     <template #header>
       <h2 class="font-semibold">
-        Novo pedido
+        New order
       </h2>
     </template>
     <div class="space-y-4">
       <div class="grid gap-3 sm:grid-cols-2">
-        <UFormField label="Cliente">
+        <UFormField label="Customer">
           <UInput v-model="customerName" class="w-full" />
         </UFormField>
         <UFormField label="E-mail">
@@ -73,25 +73,25 @@ async function submit() {
 
       <div class="space-y-2">
         <div v-for="(line, index) in lines" :key="index" class="flex items-end gap-2">
-          <UFormField :label="index === 0 ? 'Produto' : undefined" class="flex-1">
-            <USelectMenu v-model="line.productId" :items="productOptions" value-key="value" placeholder="Selecione..." class="w-full" />
+          <UFormField :label="index === 0 ? 'Product' : undefined" class="flex-1">
+            <USelectMenu v-model="line.productId" :items="productOptions" value-key="value" placeholder="Select..." class="w-full" />
           </UFormField>
-          <UFormField :label="index === 0 ? 'Qtd.' : undefined" class="w-28">
+          <UFormField :label="index === 0 ? 'Qty' : undefined" class="w-28">
             <UInputNumber v-model="line.quantity" :min="1" :max="1000" />
           </UFormField>
-          <UButton color="neutral" variant="ghost" icon="i-lucide-trash-2" :disabled="lines.length === 1" aria-label="Remover" @click="removeLine(index)" />
+          <UButton color="neutral" variant="ghost" icon="i-lucide-trash-2" :disabled="lines.length === 1" aria-label="Remove" @click="removeLine(index)" />
         </div>
         <UButton size="sm" variant="link" icon="i-lucide-plus" @click="addLine">
-          Adicionar item
+          Add item
         </UButton>
       </div>
 
-      <USwitch v-model="simulatePaymentFailure" label="Simular falha no pagamento" description="Força PaymentDeclined → a saga compensa liberando o estoque." />
+      <USwitch v-model="simulatePaymentFailure" label="Simulate payment failure" description="Forces PaymentDeclined → the saga compensates by releasing the stock." />
 
       <div class="flex items-center justify-between border-t border-(--ui-border) pt-4">
-        <span class="text-sm text-(--ui-text-muted)">Total estimado: <b class="text-(--ui-text)">{{ formatCurrency(estimatedTotal) }}</b></span>
+        <span class="text-sm text-(--ui-text-muted)">Estimated total: <b class="text-(--ui-text)">{{ formatCurrency(estimatedTotal) }}</b></span>
         <UButton icon="i-lucide-send" :loading="submitting" :disabled="!canSubmit" @click="submit">
-          Fazer pedido
+          Place order
         </UButton>
       </div>
     </div>

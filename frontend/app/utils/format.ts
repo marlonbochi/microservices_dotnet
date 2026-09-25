@@ -1,7 +1,7 @@
 import type { OrderStatus, ProblemDetails } from '~/types/api'
 
-const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
-const dateTime = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'medium' })
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+const dateTime = new Intl.DateTimeFormat('en-US', { dateStyle: 'short', timeStyle: 'medium' })
 
 export const formatCurrency = (value: number): string => currency.format(value)
 
@@ -17,17 +17,17 @@ interface StatusPresentation {
 }
 
 export const orderStatusPresentation: Record<OrderStatus, StatusPresentation> = {
-  Submitted: { label: 'Recebido', color: 'neutral', icon: 'i-lucide-inbox', final: false },
-  StockReserved: { label: 'Estoque reservado', color: 'info', icon: 'i-lucide-package-check', final: false },
-  PaymentApproved: { label: 'Pagamento aprovado', color: 'primary', icon: 'i-lucide-credit-card', final: false },
-  PaymentDeclined: { label: 'Pagamento recusado', color: 'warning', icon: 'i-lucide-credit-card', final: false },
-  Confirmed: { label: 'Confirmado', color: 'success', icon: 'i-lucide-circle-check', final: true },
-  Rejected: { label: 'Rejeitado', color: 'error', icon: 'i-lucide-circle-x', final: true },
-  Cancelled: { label: 'Cancelado', color: 'error', icon: 'i-lucide-ban', final: true },
+  Submitted: { label: 'Submitted', color: 'neutral', icon: 'i-lucide-inbox', final: false },
+  StockReserved: { label: 'Stock reserved', color: 'info', icon: 'i-lucide-package-check', final: false },
+  PaymentApproved: { label: 'Payment approved', color: 'primary', icon: 'i-lucide-credit-card', final: false },
+  PaymentDeclined: { label: 'Payment declined', color: 'warning', icon: 'i-lucide-credit-card', final: false },
+  Confirmed: { label: 'Confirmed', color: 'success', icon: 'i-lucide-circle-check', final: true },
+  Rejected: { label: 'Rejected', color: 'error', icon: 'i-lucide-circle-x', final: true },
+  Cancelled: { label: 'Cancelled', color: 'error', icon: 'i-lucide-ban', final: true },
 }
 
 /** Turns a Problem Details response into one readable sentence. */
-export function describeProblem(problem: ProblemDetails | undefined, fallback = 'Erro inesperado.'): string {
+export function describeProblem(problem: ProblemDetails | undefined, fallback = 'Unexpected error.'): string {
   if (!problem) {
     return fallback
   }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const steps = [
-  { icon: 'i-lucide-package-plus', title: '1. Cadastre produtos', text: 'O Catalog salva o produto e publica ProductCreated. O Inventory consome o evento e cria o estoque.', to: '/products' },
-  { icon: 'i-lucide-shopping-cart', title: '2. Faça pedidos', text: 'O Ordering valida preços no Catalog (HTTP) e inicia a saga: reserva de estoque → pagamento → confirmação.', to: '/orders' },
-  { icon: 'i-lucide-network', title: '3. Observe tudo', text: 'Veja filas no RabbitMQ e o trace distribuído de cada pedido no Aspire Dashboard.', to: '/architecture' },
+  { icon: 'i-lucide-package-plus', title: '1. Add products', text: 'Catalog stores the product and publishes ProductCreated. Inventory consumes the event and creates the stock record.', to: '/products' },
+  { icon: 'i-lucide-shopping-cart', title: '2. Place orders', text: 'Ordering reads prices from Catalog (HTTP) and starts the saga: reserve stock → charge payment → confirm.', to: '/orders' },
+  { icon: 'i-lucide-network', title: '3. Watch it all', text: 'See the queues in RabbitMQ and the distributed trace of every order in the Aspire Dashboard.', to: '/architecture' },
 ]
 </script>
 
@@ -10,10 +10,10 @@ const steps = [
   <div class="space-y-6">
     <div>
       <h1 class="text-2xl font-bold">
-        Loja de estudo de microsserviços
+        Microservices learning store
       </h1>
       <p class="text-(--ui-text-muted)">
-        Frontend Nuxt conversando com 4 microsserviços .NET através de um API Gateway, integrados por mensageria.
+        A Nuxt frontend talking to 4 .NET microservices through an API gateway, integrated by messaging.
       </p>
     </div>
     <div class="grid gap-4 md:grid-cols-3">
@@ -27,7 +27,7 @@ const steps = [
             {{ step.text }}
           </p>
           <UButton :to="step.to" variant="soft" trailing-icon="i-lucide-arrow-right">
-            Abrir
+            Open
           </UButton>
         </div>
       </UCard>

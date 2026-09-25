@@ -2,18 +2,18 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 
 const links: NavigationMenuItem[] = [
-  { label: 'Produtos', icon: 'i-lucide-package', to: '/products' },
-  { label: 'Pedidos', icon: 'i-lucide-shopping-cart', to: '/orders' },
-  { label: 'Arquitetura', icon: 'i-lucide-network', to: '/architecture' },
+  { label: 'Products', icon: 'i-lucide-package', to: '/products' },
+  { label: 'Orders', icon: 'i-lucide-shopping-cart', to: '/orders' },
+  { label: 'Architecture', icon: 'i-lucide-network', to: '/architecture' },
 ]
 
 const hub = useOrderHub()
 onMounted(() => hub.connect())
 
 const hubBadge = computed(() => ({
-  connected: { color: 'success' as const, label: 'Tempo real conectado' },
-  connecting: { color: 'warning' as const, label: 'Conectando...' },
-  disconnected: { color: 'error' as const, label: 'Tempo real offline' },
+  connected: { color: 'success' as const, label: 'Real-time connected' },
+  connecting: { color: 'warning' as const, label: 'Connecting...' },
+  disconnected: { color: 'error' as const, label: 'Real-time offline' },
 }[hub.status.value]))
 </script>
 

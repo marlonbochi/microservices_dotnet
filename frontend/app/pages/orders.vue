@@ -16,7 +16,7 @@ onMounted(async () => {
     await Promise.all([catalog.load(), orders.load()])
   }
   catch (error) {
-    toast.add({ title: 'Não foi possível carregar', description: describeProblem(problemOf(error), 'Gateway indisponível?'), color: 'error' })
+    toast.add({ title: 'Could not load', description: describeProblem(problemOf(error), 'Is the gateway down?'), color: 'error' })
   }
 })
 
@@ -29,10 +29,10 @@ function toggle(orderId: string) {
   <div class="space-y-4">
     <div>
       <h1 class="text-2xl font-bold">
-        Pedidos
+        Orders
       </h1>
       <p class="text-sm text-(--ui-text-muted)">
-        O pedido é aceito na hora (202) e processado de forma assíncrona: Ordering → Inventory → Payment → Inventory.
+        Orders are accepted immediately (202) and processed asynchronously: Ordering → Inventory → Payment → Inventory.
       </p>
     </div>
 
@@ -46,14 +46,14 @@ function toggle(orderId: string) {
         <template #header>
           <div class="flex items-center justify-between">
             <h2 class="font-semibold">
-              Pedidos recentes
+              Recent orders
             </h2>
             <UButton size="sm" color="neutral" variant="ghost" icon="i-lucide-refresh-cw" :loading="orders.loading" @click="orders.load()" />
           </div>
         </template>
 
         <p v-if="orders.orders.length === 0" class="text-sm text-(--ui-text-muted)">
-          Nenhum pedido ainda.
+          No orders yet.
         </p>
         <ul class="divide-y divide-(--ui-border)">
           <li v-for="order in orders.orders" :key="order.id" class="py-3">
@@ -65,7 +65,7 @@ function toggle(orderId: string) {
                 </p>
                 <p class="text-xs text-(--ui-text-muted)">
                   #{{ order.id.slice(0, 8) }} · {{ order.customerName }} · {{ formatDateTime(order.createdAt) }}
-                  <span v-if="order.simulatePaymentFailure"> · falha simulada</span>
+                  <span v-if="order.simulatePaymentFailure"> · simulated failure</span>
                 </p>
               </div>
               <span class="text-sm font-medium">{{ formatCurrency(order.total) }}</span>

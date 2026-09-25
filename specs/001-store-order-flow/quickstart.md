@@ -21,14 +21,14 @@ docker compose ps        # all services "healthy"/"running"
 
 ## Validation scenarios
 
-1. **Catalog + stock sync (US1)**: on *Produtos*, create SKU `KB-001`, price 350, stock 10 →
-   within 5 s the row shows "Disponível: 10". Restock +5 → 15. Create `KB-001` again → error
-   "SKU já existe".
-2. **Happy order (US2)**: on *Pedidos*, order 3 × `KB-001` → timeline shows Submitted →
+1. **Catalog + stock sync (US1)**: on *Products*, create SKU `KB-001`, price 350, stock 10 →
+   within 5 s the row shows "Available: 10". Restock +5 → 15. Create `KB-001` again → error
+   "A product with SKU 'KB-001' already exists".
+2. **Happy order (US2)**: on *Orders*, order 3 × `KB-001` → timeline shows Submitted →
    StockReserved → PaymentApproved → Confirmed without reloading; product now 12 available.
 3. **Insufficient stock (US3)**: order 999 units → Rejected ("insufficient stock"); stock
    unchanged.
-4. **Compensation (US3)**: order 2 units with "Simular falha no pagamento" → PaymentDeclined →
+4. **Compensation (US3)**: order 2 units with "Simulate payment failure" → PaymentDeclined →
    Cancelled; stock returns to the previous value.
 5. **Observability (US4)**: Aspire Dashboard → Traces → pick `POST /api/ordering/orders` → the trace
    spans gateway, ordering, inventory and payment. RabbitMQ UI → Queues shows one queue per consumer.

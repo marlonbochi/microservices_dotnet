@@ -8,12 +8,12 @@ const orders = useOrdersStore()
       <div class="flex items-center gap-2">
         <UIcon name="i-lucide-radio" class="text-(--ui-primary)" />
         <h2 class="font-semibold">
-          Eventos em tempo real (SignalR)
+          Real-time events (SignalR)
         </h2>
       </div>
     </template>
     <p v-if="orders.events.length === 0" class="text-sm text-(--ui-text-muted)">
-      Faça um pedido e acompanhe aqui cada transição publicada pela saga.
+      Place an order and follow every transition pushed by the saga here.
     </p>
     <ul v-else class="max-h-72 space-y-2 overflow-y-auto text-sm">
       <li v-for="event in orders.events" :key="`${event.orderId}-${event.status}-${event.receivedAt}`" class="flex items-center gap-2">

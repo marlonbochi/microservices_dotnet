@@ -103,7 +103,7 @@ tests/
 ├── Payment.UnitTests/
 └── Architecture.Tests/
 frontend/                        # Nuxt 4 app (app/pages/products.vue, app/pages/orders.vue ...)
-docs/                            # pt-BR documentation, diagrams and ADRs
+docs/                            # documentation, diagrams and ADRs (English)
 ```
 
 **Structure Decision**: monorepo with one folder per bounded context under `src/Services`, each

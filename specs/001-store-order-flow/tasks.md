@@ -116,9 +116,9 @@ description: "Task list for 001-store-order-flow"
 
 ## Phase 7: Polish & Cross-Cutting
 
-- [X] T051 [P] `README.md` (pt-BR) with overview, how to run, URLs, repo map
-- [X] T052 [P] `docs/` : arquitetura.md (C4 + Mermaid), mensageria-e-saga.md, guia-de-conceitos.md (concept → file map), testes.md, api.md
-- [X] T053 [P] ADRs in `docs/adr/` (0001 microservices + DB per service, 0002 MassTransit v8 + RabbitMQ, 0003 saga orchestration, 0004 outbox, 0005 optimistic concurrency, 0006 YARP gateway)
+- [X] T051 [P] `README.md` (English) with overview, how to run, URLs, repo map
+- [X] T052 [P] `docs/`: architecture.md (Mermaid), messaging-and-saga.md, concepts-guide.md (concept → file map), testing.md
+- [X] T053 [P] ADRs in `docs/adr/` (0001 microservices + DB per service, 0002 MassTransit v8 + RabbitMQ, 0003 saga orchestration, 0004 outbox, 0005 optimistic concurrency, 0006 YARP gateway, 0007 Clean Architecture + Result)
 - [X] T054 [P] GitHub Actions CI `.github/workflows/ci.yml` (build, unit, architecture, integration tests; frontend build)
 - [ ] T055 Full `docker compose up --build` validation following quickstart.md (backend + frontend validated end-to-end with infra in Docker and services via `dotnet run`; full image build pending free disk space)
 - [X] T056 Update `CLAUDE.md` agent context with stack and commands

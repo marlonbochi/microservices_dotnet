@@ -1,7 +1,7 @@
 # Data Model: Store Order Flow
 
 Each bounded context owns its own database. IDs are `Guid` (v7, time-ordered) generated in the
-domain. Money is `decimal(18,2)` in BRL.
+domain. Money is `decimal(18,2)` in USD.
 
 ## Catalog (`CatalogDb`)
 

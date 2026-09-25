@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { describeProblem, formatCurrency, orderStatusPresentation } from '~/utils/format'
 
 describe('formatCurrency', () => {
-  it('formats values as BRL', () => {
-    expect(formatCurrency(1234.5).replace(/\s/g, ' ')).toBe('R$ 1.234,50')
+  it('formats values as USD', () => {
+    expect(formatCurrency(1234.5)).toBe('$1,234.50')
   })
 })
 
